@@ -12,7 +12,7 @@ import static com.solvd.webtests.web.pages.util.PriceStringHelper.priceStringToB
 
 public class ProductPage extends SteamStorePageBase {
 
-    @FindBy(id = "appHubName")
+    @FindBy(id = "appHubAppName")
     private ExtendedWebElement productName;
 
     @FindBy(className = "game_purchase_price price")
