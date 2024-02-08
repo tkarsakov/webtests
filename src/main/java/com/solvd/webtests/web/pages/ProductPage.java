@@ -1,8 +1,9 @@
 package com.solvd.webtests.web.pages;
 
 import com.solvd.webtests.web.pages.common.SteamStorePageBase;
-import com.solvd.webtests.web.pages.util.PriceStringType;
+import com.solvd.webtests.web.pages.util.Currency;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
+import com.zebrunner.carina.webdriver.decorator.PageOpeningStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -15,14 +16,16 @@ public class ProductPage extends SteamStorePageBase {
     @FindBy(id = "appHubAppName")
     private ExtendedWebElement productName;
 
-    @FindBy(className = "game_purchase_price price")
+    @FindBy(xpath = "(//div[contains(@class,'game_purchase_price')])[1]")
     private ExtendedWebElement priceDiv;
 
-    @FindBy(xpath = "//h1[.='Buy %s']//following::div//a[contains(@id, 'btn_add_to_cart')]")
+    @FindBy(xpath = "(//a[contains(@id, 'btn_add_to_cart')])[1]")
     private ExtendedWebElement addToCartButton;
 
     public ProductPage(WebDriver driver) {
         super(driver);
+        setPageOpeningStrategy(PageOpeningStrategy.BY_ELEMENT);
+        setUiLoadedMarker(priceDiv);
     }
 
     public CartPage clickAddToCartButton() {
@@ -31,6 +34,10 @@ public class ProductPage extends SteamStorePageBase {
     }
 
     public BigDecimal getProductPrice() {
-        return priceStringToBigDecimal(priceDiv.getText(), PriceStringType.PRICE);
+        return priceStringToBigDecimal(priceDiv.getText(), Currency.USD);
+    }
+
+    public String getProductNameString() {
+        return productName.getText();
     }
 }

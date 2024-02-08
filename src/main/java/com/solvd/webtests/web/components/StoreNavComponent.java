@@ -28,9 +28,13 @@ public class StoreNavComponent extends AbstractUIObject {
         return new StorePage(driver);
     }
 
-    public ProductPage searchAndClickItemInResults(String itemName) {
-        searchBar.type(itemName);
+    public ProductPage clickOnItemInSearchResultsByName(String itemName) {
         searchResultGame.format(itemName).click();
         return new ProductPage(driver);
+    }
+
+    public StoreNavComponent typeSearchPhrase(String itemName) {
+        searchBar.type(itemName);
+        return this;
     }
 }

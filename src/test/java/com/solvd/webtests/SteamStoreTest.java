@@ -1,50 +1,67 @@
 package com.solvd.webtests;
 
+import com.solvd.webtests.web.entity.Product;
 import com.solvd.webtests.web.pages.CartPage;
 import com.solvd.webtests.web.pages.ProductPage;
 import com.solvd.webtests.web.pages.StorePage;
+import com.solvd.webtests.web.service.LocaleService;
 import com.zebrunner.carina.core.IAbstractTest;
 import com.zebrunner.carina.utils.R;
-import org.openqa.selenium.ElementNotInteractableException;
 import org.testng.Assert;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SteamStoreTest implements IAbstractTest {
 
     private StorePage storePage = null;
+    private CartPage cartPage = null;
+    private ProductPage productPage = null;
+    private List<Product> products = new ArrayList<>();
 
-    @BeforeSuite
-    public void startDriverAndOpenMainPage() {
+    @BeforeTest
+    public void setup() {
         storePage = new StorePage(getDriver());
         storePage.open();
+        LocaleService.setLocaleInConfig(storePage.getLocale());
     }
 
     @Test
-    public void testOpenPage() {
-        Assert.assertTrue(storePage.isPageOpened());
-    }
+    public void testAddTwoItemsFromSearch() {
+        String firstGameName = R.TESTDATA.get("game1");
+        String secondGameName = R.TESTDATA.get("game2");
 
-    @Test(expectedExceptions = ElementNotInteractableException.class)
-    public void testClickCartButtonWithoutAddingItems() {
-        storePage.getCartButtonComponent().clickCartButton();
-    }
+        productPage = storePage.getStoreNavComponent()
+                .typeSearchPhrase(firstGameName)
+                .clickOnItemInSearchResultsByName(firstGameName);
+        products.add(new Product(productPage.getProductNameString(), productPage.getProductPrice()));
+        cartPage = productPage.clickAddToCartButton();
 
-    @Test
-    public void testAddItemFromSearchToCart() {
-        String firstGame = R.TESTDATA.get("search_game1");
-        String secondGame = R.TESTDATA.get("search_game2");
-
-        ProductPage productPage = storePage.getStoreNavComponent()
-                .searchAndClickItemInResults(firstGame);
-        CartPage cartPage = productPage.clickAddToCartButton();
-        cartPage.getStoreNavComponent().searchAndClickItemInResults(secondGame);
+        cartPage.getStoreNavComponent()
+                .typeSearchPhrase(secondGameName)
+                .clickOnItemInSearchResultsByName(secondGameName);
+        products.add(new Product(productPage.getProductNameString(), productPage.getProductPrice()));
         productPage.clickAddToCartButton();
-        
+
         List<String> names = cartPage.getItemNames();
-        Assert.assertTrue(names.contains(firstGame));
-        Assert.assertTrue(names.contains(secondGame));
+        BigDecimal totalFromPages = products.get(0).getProductPrice().add(products.get(1).getProductPrice());
+        BigDecimal cartTotal = cartPage.getEstimatedTotal();
+        Assert.assertTrue(names.contains(firstGameName));
+        Assert.assertTrue(names.contains(secondGameName));
+        Assert.assertEquals(totalFromPages, cartTotal);
+    }
+
+    @Test(dependsOnMethods = "testAddTwoItemsFromSearch")
+    public void testRemoveItemsFromCart() {
+        BigDecimal cartTotalBeforeRemoval = cartPage.getEstimatedTotal();
+        cartPage.removeItemFromCartByName(products.get(0).getProductName());
+        Assert.assertEquals(cartTotalBeforeRemoval.subtract(cartPage.getEstimatedTotal()), products.get(0).getProductPrice());
+
+        cartTotalBeforeRemoval = cartPage.getEstimatedTotal();
+        cartPage.removeItemFromCartByName(products.get(1).getProductName());
+        Assert.assertEquals(cartTotalBeforeRemoval.subtract(cartPage.getEstimatedTotal()), products.get(0).getProductPrice());
     }
 }
