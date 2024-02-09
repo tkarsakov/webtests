@@ -1,5 +1,6 @@
 package com.solvd.webtests.web.pages;
 
+import com.solvd.webtests.web.entity.Product;
 import com.solvd.webtests.web.pages.common.SteamStorePageBase;
 import com.solvd.webtests.web.pages.util.Currency;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
@@ -39,5 +40,9 @@ public class ProductPage extends SteamStorePageBase {
 
     public String getProductNameString() {
         return productName.getText();
+    }
+
+    public Product getProduct() {
+        return new Product(getProductNameString(), getProductPrice());
     }
 }

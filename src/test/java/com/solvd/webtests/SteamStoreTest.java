@@ -6,6 +6,7 @@ import com.solvd.webtests.web.pages.ContentTab;
 import com.solvd.webtests.web.pages.ProductPage;
 import com.solvd.webtests.web.pages.StorePage;
 import com.solvd.webtests.web.service.LocaleService;
+import com.solvd.webtests.web.service.ScrollingService;
 import com.zebrunner.carina.core.IAbstractTest;
 import com.zebrunner.carina.utils.R;
 import org.testng.annotations.BeforeTest;
@@ -74,11 +75,29 @@ public class SteamStoreTest implements IAbstractTest {
     @Test
     public void testCompareProductOnStorePageAndProductPage() {
         SoftAssert softAssert = new SoftAssert();
-        Integer order = 1;
+        Integer order = R.TESTDATA.getInt("order");
         Product productOnStorePage = storePage.getProductFromContentTab(ContentTab.newreleases, order);
         productPage = storePage.clickOnPaidGameInContentTab(ContentTab.newreleases, order);
         softAssert.assertTrue(productPage.isPageOpened());
         softAssert.assertEquals(productOnStorePage.getProductName(), productPage.getProductNameString());
         softAssert.assertEquals(productOnStorePage.getProductPrice(), productPage.getProductPrice());
+    }
+
+    @Test
+    public void testPagesAreScrollable() {
+        SoftAssert softAssert = new SoftAssert();
+        Long scrollAmount = R.TESTDATA.getLong("scrollAmount");
+
+        ScrollingService.scrollDown(scrollAmount, getDriver());
+        softAssert.assertEquals(ScrollingService.getScrollingPosition(getDriver()), scrollAmount);
+
+        productPage = storePage.clickOnPaidGameInContentTab(ContentTab.newreleases, R.TESTDATA.getInt("order"));
+        ScrollingService.scrollDown(scrollAmount, getDriver());
+        softAssert.assertEquals(ScrollingService.getScrollingPosition(getDriver()), scrollAmount);
+
+        cartPage = productPage.clickAddToCartButton();
+        ScrollingService.scrollDown(scrollAmount, getDriver());
+        softAssert.assertEquals(ScrollingService.getScrollingPosition(getDriver()), scrollAmount);
+        softAssert.assertAll();
     }
 }
