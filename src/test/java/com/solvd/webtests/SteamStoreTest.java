@@ -1,10 +1,9 @@
 package com.solvd.webtests;
 
+import com.solvd.webtests.web.entity.ExpectedSearchResult;
 import com.solvd.webtests.web.entity.Product;
-import com.solvd.webtests.web.pages.CartPage;
-import com.solvd.webtests.web.pages.ContentTab;
-import com.solvd.webtests.web.pages.ProductPage;
-import com.solvd.webtests.web.pages.StorePage;
+import com.solvd.webtests.web.pages.*;
+import com.solvd.webtests.web.pages.common.Locale;
 import com.solvd.webtests.web.service.LocaleService;
 import com.solvd.webtests.web.service.ScrollingService;
 import com.zebrunner.carina.core.IAbstractTest;
@@ -14,21 +13,23 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import java.math.BigDecimal;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SteamStoreTest implements IAbstractTest {
 
+    private final List<Product> products = new ArrayList<>();
     private StorePage storePage = null;
     private CartPage cartPage = null;
     private ProductPage productPage = null;
-    private List<Product> products = new ArrayList<>();
 
     @BeforeTest
     public void setup() {
         storePage = new StorePage(getDriver());
         storePage.open();
-        LocaleService.setLocaleInConfig(storePage.getLocale());
+        LocaleService.setBothLocaleAndBrowserLocaleInConfig(Locale.EN);
+
     }
 
     @Test
@@ -81,6 +82,7 @@ public class SteamStoreTest implements IAbstractTest {
         softAssert.assertTrue(productPage.isPageOpened());
         softAssert.assertEquals(productOnStorePage.getProductName(), productPage.getProductNameString());
         softAssert.assertEquals(productOnStorePage.getProductPrice(), productPage.getProductPrice());
+        softAssert.assertAll();
     }
 
     @Test
@@ -96,8 +98,29 @@ public class SteamStoreTest implements IAbstractTest {
         softAssert.assertEquals(ScrollingService.getScrollingPosition(getDriver()), scrollAmount);
 
         cartPage = productPage.clickAddToCartButton();
+        softAssert.assertTrue(cartPage.isPageOpened());
         ScrollingService.scrollDown(scrollAmount, getDriver());
         softAssert.assertEquals(ScrollingService.getScrollingPosition(getDriver()), scrollAmount);
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void testSearchResults() {
+        SoftAssert softAssert = new SoftAssert();
+        ExpectedSearchResult expectedSearchResult1 = new ExpectedSearchResult(R.TESTDATA.get("game2"));
+        expectedSearchResult1.addSearchResults(
+                new AbstractMap.SimpleEntry<>(R.TESTDATA.get("searchResult1forGame2"), 1),
+                new AbstractMap.SimpleEntry<>(R.TESTDATA.get("searchResult2forGame2"), 2));
+        ExpectedSearchResult expectedSearchResult2 = new ExpectedSearchResult(R.TESTDATA.get("game3"));
+        expectedSearchResult2.addSearchResults(
+                new AbstractMap.SimpleEntry<>(R.TESTDATA.get("searchResult1forGame3"), 1),
+                new AbstractMap.SimpleEntry<>(R.TESTDATA.get("searchResult2forGame3"), 2));
+
+        SearchResultPage searchResultPage = storePage.getStoreNavComponent().typeSearchPhrase(expectedSearchResult1.getSearchTerm()).clickSearchButton();
+        softAssert.assertTrue(searchResultPage.isExpectedResultCorrect(expectedSearchResult1));
+
+        searchResultPage.getStoreNavComponent().typeSearchPhrase(expectedSearchResult2.getSearchTerm()).clickSearchButton();
+        softAssert.assertTrue(searchResultPage.isExpectedResultCorrect(expectedSearchResult2));
         softAssert.assertAll();
     }
 }

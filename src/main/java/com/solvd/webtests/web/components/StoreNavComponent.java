@@ -1,6 +1,7 @@
 package com.solvd.webtests.web.components;
 
 import com.solvd.webtests.web.pages.ProductPage;
+import com.solvd.webtests.web.pages.SearchResultPage;
 import com.solvd.webtests.web.pages.StorePage;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import com.zebrunner.carina.webdriver.gui.AbstractUIObject;
@@ -19,6 +20,9 @@ public class StoreNavComponent extends AbstractUIObject {
     @FindBy(xpath = "//a[contains(@class, 'match_app')]/div[text()='%s']")
     private ExtendedWebElement searchResultGame;
 
+    @FindBy(xpath = "//a[@id='store_search_link']/img")
+    private ExtendedWebElement searchButton;
+
     public StoreNavComponent(WebDriver driver, SearchContext searchContext) {
         super(driver, searchContext);
     }
@@ -36,5 +40,10 @@ public class StoreNavComponent extends AbstractUIObject {
     public StoreNavComponent typeSearchPhrase(String itemName) {
         searchBar.type(itemName);
         return this;
+    }
+
+    public SearchResultPage clickSearchButton() {
+        searchButton.click();
+        return new SearchResultPage(driver);
     }
 }

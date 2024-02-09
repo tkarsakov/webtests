@@ -15,6 +15,9 @@ import static com.solvd.webtests.web.pages.util.PriceStringHelper.priceStringToB
 
 public class StorePage extends SteamStorePageBase {
 
+    @FindBy(xpath = "//title[text()='{L10N:StorePage.title}']")
+    private ExtendedWebElement title;
+
     @FindBy(id = "tab_%s_content_trigger")
     private ExtendedWebElement contentTab;
 
@@ -48,5 +51,9 @@ public class StorePage extends SteamStorePageBase {
         String productName = paidGameInCategoryName.format(contentTab.name(), order).getText();
         BigDecimal productPrice = priceStringToBigDecimal(paidGameInCategoryPrice.format(contentTab.name(), order).getText(), Currency.USD);
         return new Product(productName, productPrice);
+    }
+
+    public ExtendedWebElement getTitleElement() {
+        return title;
     }
 }

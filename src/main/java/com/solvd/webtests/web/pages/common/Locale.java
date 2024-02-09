@@ -2,7 +2,8 @@ package com.solvd.webtests.web.pages.common;
 
 public enum Locale {
     RU("ru", "ru_RU"),
-    EN("en", "en_US");
+    EN("en", "en_US"),
+    DE("de", "de_DE");
 
     private final String locale;
 
