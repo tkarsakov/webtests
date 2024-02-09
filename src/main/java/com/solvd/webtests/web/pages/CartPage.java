@@ -27,7 +27,7 @@ public class CartPage extends SteamStorePageBase {
 
     public CartPage(WebDriver driver) {
         super(driver);
-        setPageOpeningStrategy(PageOpeningStrategy.BY_URL_AND_ELEMENT);
+        setPageOpeningStrategy(PageOpeningStrategy.BY_URL);
     }
 
     public BigDecimal getItemPrice(ExtendedWebElement cartItem) {
