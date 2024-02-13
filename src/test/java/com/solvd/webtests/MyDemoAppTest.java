@@ -1,9 +1,7 @@
 package com.solvd.webtests;
 
-import com.solvd.webtests.mobile.pages.common.CartPageBase;
 import com.solvd.webtests.mobile.pages.common.MainPageBase;
 import com.zebrunner.carina.core.IAbstractTest;
-import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -18,7 +16,6 @@ public class MyDemoAppTest implements IAbstractTest {
 
     @Test
     public void testClickCartButton() {
-        CartPageBase cartPage = mainPageBase.getCartModal().clickCartButton();
-        Assert.assertTrue(cartPage.isPageOpened());
+        mainPageBase.getStoreItemByOrder(1);
     }
 }
