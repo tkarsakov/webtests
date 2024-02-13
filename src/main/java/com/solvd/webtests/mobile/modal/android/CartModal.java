@@ -1,6 +1,6 @@
-package com.solvd.webtests.mobile.components.android;
+package com.solvd.webtests.mobile.modal.android;
 
-import com.solvd.webtests.mobile.components.common.CartModalBase;
+import com.solvd.webtests.mobile.modal.common.CartModalBase;
 import com.solvd.webtests.mobile.pages.common.CartPageBase;
 import com.zebrunner.carina.utils.factory.DeviceType;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;

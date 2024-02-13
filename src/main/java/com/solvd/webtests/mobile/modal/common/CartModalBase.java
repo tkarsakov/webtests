@@ -1,4 +1,4 @@
-package com.solvd.webtests.mobile.components.common;
+package com.solvd.webtests.mobile.modal.common;
 
 import com.solvd.webtests.mobile.pages.common.CartPageBase;
 import com.zebrunner.carina.webdriver.gui.AbstractPage;
