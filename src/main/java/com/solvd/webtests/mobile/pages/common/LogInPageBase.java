@@ -15,4 +15,8 @@ public abstract class LogInPageBase extends AbstractPage {
     public abstract LogInPageBase typePass(String pass);
 
     public abstract Optional<MainPageBase> clickLogInButton();
+
+    public abstract boolean isLogInErrorMessagePresent();
+
+    public abstract boolean isOpened();
 }

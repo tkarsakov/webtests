@@ -25,6 +25,7 @@ public class LogOutModal extends LogOutModalBase {
         super(driver, searchContext);
     }
 
+    @Override
     public LogOutConfirmationModalBase clickLogOut() {
         logOutButton.click();
         return initPage(driver, LogOutConfirmationModalBase.class);

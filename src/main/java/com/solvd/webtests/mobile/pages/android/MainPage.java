@@ -50,8 +50,8 @@ public class MainPage extends MainPageBase {
     }
 
     @Override
-    public ProductPageBase clickOnProductByOrder(Integer order) {
-        storeItem.click();
+    public ProductPageBase clickOnStoreItemByOrder(Integer order) {
+        storeItem.format(order).click();
         return initPage(driver, ProductPageBase.class);
     }
 }

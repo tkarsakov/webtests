@@ -12,4 +12,6 @@ public abstract class LogOutModalBase extends AbstractPage {
     public LogOutModalBase(WebDriver driver, SearchContext searchContext) {
         super(driver);
     }
+
+    public abstract LogOutConfirmationModalBase clickLogOut();
 }

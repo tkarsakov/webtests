@@ -1,6 +1,7 @@
 package com.solvd.webtests.mobile.modal.common;
 
 import com.solvd.webtests.mobile.pages.common.LogInPageBase;
+import com.solvd.webtests.mobile.pages.common.MainPageBase;
 import com.zebrunner.carina.webdriver.gui.AbstractPage;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -19,5 +20,7 @@ public abstract class SideMenuModalBase extends AbstractPage {
 
     public abstract LogInPageBase clickLogIn();
 
-    public abstract LogOutConfirmationModalBase clickLogOut();
+    public abstract LogOutModalBase clickLogOut();
+
+    public abstract MainPageBase clickCatalog();
 }

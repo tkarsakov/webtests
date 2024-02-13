@@ -46,4 +46,19 @@ public class ProductPage extends ProductPageBase {
         addToCartButton.click();
         return this;
     }
+
+    @Override
+    public SideMenuModal getSideMenuModal() {
+        return sideMenuModal;
+    }
+
+    @Override
+    public CartModal getCartModal() {
+        return cartModal;
+    }
+
+    @Override
+    public boolean isPageOpened() {
+        return itemPrice.isElementPresent();
+    }
 }

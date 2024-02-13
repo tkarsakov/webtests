@@ -27,6 +27,9 @@ public class LogInPage extends LogInPageBase {
     @ExtendedFindBy(accessibilityId = "generic-error-message")
     private ExtendedWebElement errorMessage;
 
+    @FindBy(xpath = "//android.widget.TextView[@text=\"Provided credentials do not match any user in this service.\"]")
+    private ExtendedWebElement logInErrorMessage;
+
     @FindBy
     private SideMenuModal sideMenuModal;
 
@@ -52,10 +55,20 @@ public class LogInPage extends LogInPageBase {
     @Override
     public Optional<MainPageBase> clickLogInButton() {
         loginButton.click();
-        if (errorMessage.isDisplayed()) {
+        if (isLogInErrorMessagePresent()) {
             return Optional.empty();
         } else {
             return Optional.of(initPage(driver, MainPageBase.class));
         }
+    }
+
+    @Override
+    public boolean isLogInErrorMessagePresent() {
+        return logInErrorMessage.isElementPresent();
+    }
+
+    @Override
+    public boolean isOpened() {
+        return usernameField.isElementPresent();
     }
 }

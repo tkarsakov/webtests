@@ -1,8 +1,9 @@
 package com.solvd.webtests.mobile.modal.android;
 
-import com.solvd.webtests.mobile.modal.common.LogOutConfirmationModalBase;
+import com.solvd.webtests.mobile.modal.common.LogOutModalBase;
 import com.solvd.webtests.mobile.modal.common.SideMenuModalBase;
 import com.solvd.webtests.mobile.pages.common.LogInPageBase;
+import com.solvd.webtests.mobile.pages.common.MainPageBase;
 import com.zebrunner.carina.utils.factory.DeviceType;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import com.zebrunner.carina.webdriver.locator.ExtendedFindBy;
@@ -20,6 +21,9 @@ public class SideMenuModal extends SideMenuModalBase {
 
     @ExtendedFindBy(accessibilityId = "menu item log out")
     private ExtendedWebElement logOutMenuItem;
+
+    @ExtendedFindBy(accessibilityId = "menu item catalog")
+    private ExtendedWebElement catalogMenuItem;
 
     public SideMenuModal(WebDriver driver) {
         super(driver);
@@ -42,8 +46,14 @@ public class SideMenuModal extends SideMenuModalBase {
     }
 
     @Override
-    public LogOutConfirmationModalBase clickLogOut() {
+    public LogOutModalBase clickLogOut() {
         logOutMenuItem.click();
-        return initPage(driver, LogOutConfirmationModalBase.class);
+        return initPage(driver, LogOutModalBase.class);
+    }
+
+    @Override
+    public MainPageBase clickCatalog() {
+        catalogMenuItem.click();
+        return initPage(driver, MainPageBase.class);
     }
 }

@@ -18,5 +18,5 @@ public abstract class MainPageBase extends AbstractPage {
 
     public abstract Item getStoreItemByOrder(Integer order);
 
-    public abstract ProductPageBase clickOnProductByOrder(Integer order);
+    public abstract ProductPageBase clickOnStoreItemByOrder(Integer order);
 }
