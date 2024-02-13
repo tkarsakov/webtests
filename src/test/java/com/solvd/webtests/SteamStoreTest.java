@@ -8,6 +8,7 @@ import com.solvd.webtests.web.service.LocaleService;
 import com.solvd.webtests.web.service.ScrollingService;
 import com.zebrunner.carina.core.IAbstractTest;
 import com.zebrunner.carina.utils.R;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -41,18 +42,19 @@ public class SteamStoreTest implements IAbstractTest {
         productPage = storePage.getStoreNavComponent()
                 .typeSearchPhrase(firstGameName)
                 .clickOnItemInSearchResultsByName(firstGameName);
-        products.add(new Product(productPage.getProductNameString(), productPage.getProductPrice()));
+        products.add(productPage.getProduct());
         cartPage = productPage.clickAddToCartButton();
 
         cartPage.getStoreNavComponent()
                 .typeSearchPhrase(secondGameName)
                 .clickOnItemInSearchResultsByName(secondGameName);
-        products.add(new Product(productPage.getProductNameString(), productPage.getProductPrice()));
+        products.add(productPage.getProduct());
         productPage.clickAddToCartButton();
 
         List<String> names = cartPage.getItemNames();
         BigDecimal totalFromPages = products.get(0).getProductPrice().add(products.get(1).getProductPrice());
         BigDecimal cartTotal = cartPage.getEstimatedTotal();
+        Assert.assertEquals(names.size(), 2);
         softAssert.assertTrue(names.contains(firstGameName));
         softAssert.assertTrue(names.contains(secondGameName));
         softAssert.assertEquals(totalFromPages, cartTotal);

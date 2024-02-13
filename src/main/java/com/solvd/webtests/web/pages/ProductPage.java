@@ -17,8 +17,11 @@ public class ProductPage extends SteamStorePageBase {
     @FindBy(id = "appHubAppName")
     private ExtendedWebElement productName;
 
-    @FindBy(xpath = "(//div[contains(@class,'game_purchase_price')])[1]")
+    @FindBy(xpath = "(//div[contains(@class,\"game_area_purchase\")]//div[contains(@class,'price')])[1]")
     private ExtendedWebElement priceDiv;
+
+    @FindBy(xpath = "(//div[contains(@class,'discount_final_price')])[1]")
+    private ExtendedWebElement discountPriceDiv;
 
     @FindBy(xpath = "(//a[contains(@id, 'btn_add_to_cart')])[1]")
     private ExtendedWebElement addToCartButton;
@@ -35,6 +38,9 @@ public class ProductPage extends SteamStorePageBase {
     }
 
     public BigDecimal getProductPrice() {
+        if (priceDiv.getText().length() > 10) {
+            return priceStringToBigDecimal(discountPriceDiv.getText(), Currency.USD);
+        }
         return priceStringToBigDecimal(priceDiv.getText(), Currency.USD);
     }
 
