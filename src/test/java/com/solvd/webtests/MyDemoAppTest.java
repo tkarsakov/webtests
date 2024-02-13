@@ -13,6 +13,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public class MyDemoAppTest implements IAbstractTest {
@@ -22,6 +23,8 @@ public class MyDemoAppTest implements IAbstractTest {
     private LogInPageBase logInPageBase = null;
 
     private ProductPageBase productPageBase = null;
+
+    private CartPageBase cartPage = null;
 
     @BeforeTest
     public void setup() {
@@ -78,13 +81,27 @@ public class MyDemoAppTest implements IAbstractTest {
         Item secondItem = productPageBase.getItem();
         productPageBase.clickAddToCartButton();
 
-        CartPageBase cartPageBase = productPageBase.getCartModal().clickCartButton();
-        Item firstItemFromCart = cartPageBase.getItemByRow(1);
-        Item secondItemFromCart = cartPageBase.getItemByRow(2);
+        cartPage = productPageBase.getCartModal().clickCartButton();
+        Item firstItemFromCart = cartPage.getItemByRow(1);
+        Item secondItemFromCart = cartPage.getItemByRow(2);
 
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(firstItem, firstItemFromCart);
         softAssert.assertEquals(secondItem, secondItemFromCart);
         softAssert.assertAll();
+    }
+
+    @Test(dependsOnMethods = "testAddItemsToCart")
+    public void testRemoveItemsFromCart() {
+        Item firstItemFromCart = cartPage.getItemByRow(1);
+        Item secondItemFromCart = cartPage.getItemByRow(2);
+        BigDecimal totalBeforeOperations = cartPage.getTotalPrice();
+        Assert.assertEquals(firstItemFromCart.getItemPrice().add(secondItemFromCart.getItemPrice()), totalBeforeOperations);
+
+        cartPage.clickRemoveItemByRow(1);
+        Assert.assertEquals(totalBeforeOperations.subtract(firstItemFromCart.getItemPrice()), cartPage.getTotalPrice());
+
+        cartPage.clickRemoveItemByRow(1);
+        Assert.assertTrue(cartPage.isCartEmpty());
     }
 }

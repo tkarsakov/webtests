@@ -22,6 +22,12 @@ public class CartPage extends CartPageBase {
     @FindBy
     private CartModal cartModal;
 
+    @ExtendedFindBy(accessibilityId = "total price")
+    private ExtendedWebElement totalPrice;
+
+    @FindBy(xpath = "(//android.widget.TextView[@text=\"Remove Item\"])[%d]")
+    private ExtendedWebElement removeItemButtonByRow;
+
     @ExtendedFindBy(accessibilityId = "Go Shopping button")
     private ExtendedWebElement goShoppingButton;
 
@@ -45,5 +51,21 @@ public class CartPage extends CartPageBase {
         String itemName = itemTextByRowAndField.format(row, CartProductField.label.name()).getAttribute("text");
         BigDecimal itemPrice = new BigDecimal(itemTextByRowAndField.format(row, CartProductField.price.name()).getAttribute("text").replace("$", ""));
         return new Item(itemName, itemPrice);
+    }
+
+    @Override
+    public BigDecimal getTotalPrice() {
+        return new BigDecimal(totalPrice.getAttribute("text").replace("$", ""));
+    }
+
+    @Override
+    public CartPageBase clickRemoveItemByRow(Integer row) {
+        removeItemButtonByRow.format(row).click();
+        return this;
+    }
+
+    @Override
+    public Boolean isCartEmpty() {
+        return goShoppingButton.isElementPresent();
     }
 }
