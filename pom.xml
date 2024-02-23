@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.solvd</groupId>
@@ -12,12 +12,8 @@
         <carina-core_version>1.2.6</carina-core_version>
         <carina-dataprovider.version>1.2.4</carina-dataprovider.version>
         <carina-api.version>1.2.4</carina-api.version>
-        <carina-aws-s3.version>1.2.5</carina-aws-s3.version>
-        <carina-azure.version>1.2.5</carina-azure.version>
-        <carina-appcenter.version>1.2.6</carina-appcenter.version>
-
+        <suite></suite>
         <java.version>11</java.version>
-        <zebrunner-agent.version>1.9.8</zebrunner-agent.version>
     </properties>
 
     <dependencies>
@@ -41,11 +37,6 @@
             <groupId>com.zebrunner</groupId>
             <artifactId>carina-api</artifactId>
             <version>${carina-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.zebrunner</groupId>
-            <artifactId>carina-appcenter</artifactId>
-            <version>${carina-appcenter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -86,36 +77,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.6.0</version>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <artifactItems>
-                        <artifactItem>
-                            <groupId>com.zebrunner</groupId>
-                            <artifactId>agent-core</artifactId>
-                            <version>${zebrunner-agent.version}</version>
-                            <outputDirectory>${project.build.directory}/agent</outputDirectory>
-                            <destFileName>zebrunner-agent.jar</destFileName>
-                        </artifactItem>
-                    </artifactItems>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <argLine>-javaagent:${project.build.directory}/agent/zebrunner-agent.jar</argLine>
-                    <useSystemClassLoader>false</useSystemClassLoader>
+                    <suiteXmlFiles>${project.build.directory}/test-classes/testng_suites/${suite}.xml</suiteXmlFiles>
                 </configuration>
             </plugin>
         </plugins>
