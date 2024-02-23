@@ -48,8 +48,8 @@ public class CartPage extends CartPageBase {
 
     @Override
     public Item getItemByRow(Integer row) {
-        String itemName = itemTextByRowAndField.format(row, CartProductField.label.name()).getAttribute("text");
-        BigDecimal itemPrice = new BigDecimal(itemTextByRowAndField.format(row, CartProductField.price.name()).getAttribute("text").replace("$", ""));
+        String itemName = itemTextByRowAndField.format(row, CartProductField.LABEL.name().toLowerCase()).getAttribute("text");
+        BigDecimal itemPrice = new BigDecimal(itemTextByRowAndField.format(row, CartProductField.PRICE.name().toLowerCase()).getAttribute("text").replace("$", ""));
         return new Item(itemName, itemPrice);
     }
 

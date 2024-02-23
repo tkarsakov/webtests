@@ -44,8 +44,8 @@ public class MainPage extends MainPageBase {
 
     @Override
     public Item getStoreItemByOrder(Integer order) {
-        String itemName = storeItemText.format(order, ItemFields.text.name()).getAttribute("text");
-        BigDecimal itemPrice = new BigDecimal(storeItemText.format(order, ItemFields.price.name()).getAttribute("text").replace("$", ""));
+        String itemName = storeItemText.format(order, ItemFields.TEXT.name().toLowerCase()).getAttribute("text");
+        BigDecimal itemPrice = new BigDecimal(storeItemText.format(order, ItemFields.PRICE.name().toLowerCase()).getAttribute("text").replace("$", ""));
         return new Item(itemName, itemPrice);
     }
 
